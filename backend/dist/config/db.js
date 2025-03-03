@@ -7,20 +7,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { connectDB } from './config/db.js';
-import { app } from './app.js';
-const connection = () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const pool = yield connectDB();
-        console.log('✅ Connected to Azure SQL Database');
-    }
-    catch (error) {
-        console.error('❌ Connection error:', error);
-        process.exit(1);
-    }
-});
-connection();
-const port = process.env.PORT;
-app.listen(port || 3000, () => {
-    console.log(`Server is running on port ${port}`);
+import sql from 'mssql';
+import config from './config.js';
+export const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
+    const pool = yield sql.connect(config);
+    if (pool)
+        return pool;
+    else
+        throw new Error('Database connection failed');
 });
