@@ -8,7 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { connectDB } from './config/db.js';
-import { app } from './app.js';
+import express from 'express';
+import 'dotenv/config';
+const app = express();
 const connection = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const pool = yield connectDB();

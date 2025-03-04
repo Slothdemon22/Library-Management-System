@@ -1,8 +1,9 @@
-import sql from 'mssql';
-import config from './config/config';
-import { connectDB } from './config/db.js';
-import { app } from './app.js';
 
+import { connectDB } from './config/db.js';
+import express from 'express';
+import 'dotenv/config';
+
+const app = express();
 const connection = async () => {
   try {
     
