@@ -11,6 +11,13 @@ import sql from 'mssql';
 import config from './config.js';
 export const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
     const pool = yield sql.connect(config);
+    console.log("pool", pool.pool.used.length);
+    yield sql.connect(config);
+    yield sql.connect(config);
+    console.log(`✅ Connected to Azure SQL Database`);
+    console.log(`Active Connections: ${pool.pool.used.length}`);
+    console.log(`Idle Connections: ${pool.pool.free.length}`);
+    console.log(`Pending Requests: ${pool.pool.pendingAcquires.length}`);
     if (pool)
         return pool;
     else
