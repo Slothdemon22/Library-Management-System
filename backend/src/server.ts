@@ -1,9 +1,10 @@
-
-import { connectDB } from './config/db.js';
+import sql from 'mssql';
+import config from './config/config.js';
 import express from 'express';
 import 'dotenv/config';
 import router from './routes/authRoutes.js';
 import cookieparser from 'cookie-parser'
+import { connectDB } from './config/db.js';
 
 const app = express();
 app.use(express.json())
@@ -22,12 +23,22 @@ const connection = async () => {
   }
 };
 
-connection(); 
+
 
 app.use('/api/auth', router)
 
 const port = process.env.PORT;
 app.listen(port||3000, () =>
 {
-   console.log(`Server is running on port ${port}`);
+  console.log(`Server is running on port ${port}`);
+
+
+  
+})
+
+
+const PORT = process.env.PORT || 3000;
+app.listen(3000, function listener(){
+
+  console.log(`App runnng on port ${PORT} `)
 })

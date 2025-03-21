@@ -7,22 +7,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { connectDB } from './config/db.js';
-import express from 'express';
-import 'dotenv/config';
-const app = express();
-const connection = () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const pool = yield connectDB();
-        console.log('✅ Connected to Azure SQL Database');
+import sql from 'mssql';
+import config from '../config/config.js';
+export class database {
+    constructor() {
+        console.log("Cant Touch This im private");
     }
-    catch (error) {
-        console.error('❌ Connection error:', error);
-        process.exit(1);
+    static getInstance() {
+        if (!this.instance) {
+            this.instance = new database();
+        }
+        return this.instance;
     }
-});
-connection();
-const port = process.env.PORT;
-app.listen(port || 3000, () => {
-    console.log(`Server is running on port ${port}`);
-});
+    static getPool() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return (yield sql.connect(config)).request();
+        });
+    }
+}
+;

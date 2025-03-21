@@ -14,3 +14,4 @@ export const connectDB = async () => {
     else
         throw new Error('Database connection failed');
 };
+
