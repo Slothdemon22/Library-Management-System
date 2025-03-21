@@ -3,7 +3,7 @@ import config from './config.js';
 export const connectDB = async() =>
 {
   const pool = await sql.connect(config);
-  console.log("pool", pool.pool.used.length)
+  //console.log("pool", pool.pool.used.length)
   // await sql.connect(config);
   // await sql.connect(config);
   // console.log(`✅ Connected to Azure SQL Database`);
