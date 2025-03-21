@@ -1,26 +1,25 @@
-
-import { connectDB } from './config/db.js';
+import sql from 'mssql';
+import config from './config/config.js';
 import express from 'express';
-import 'dotenv/config';
+
+import { BookQueries } from './database/bookQueries.js';
+import { database } from './database/dbController.js'
 
 const app = express();
-const connection = async () => {
-  try {
-    
-    const pool = await connectDB(); 
-    
-    console.log('✅ Connected to Azure SQL Database');
-    
-  } catch (error) {
-    console.error('❌ Connection error:', error);
-    process.exit(1);
-  }
-};
 
-connection(); 
 
-const port = process.env.PORT;
-app.listen(port||3000, () =>
-{
-   console.log(`Server is running on port ${port}`);
+
+app.get('/', async (req, res) => {
+
+  const respsonse = await BookQueries.getBookInstance().getBooks(1);
+  console.log(respsonse)
+  res.send(respsonse)
+  
+})
+
+
+const PORT = process.env.PORT || 3000;
+app.listen(3000, function listener(){
+
+  console.log(`App runnng on port ${PORT} `)
 })

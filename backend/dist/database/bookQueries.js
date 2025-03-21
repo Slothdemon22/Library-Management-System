@@ -7,15 +7,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import express from 'express';
-import { BookQueries } from './database/bookQueries.js';
-const app = express();
-app.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const respsonse = yield BookQueries.getBookInstance().getBooks(1);
-    console.log(respsonse);
-    res.send(respsonse);
-}));
-const PORT = process.env.PORT || 3000;
-app.listen(3000, function listener() {
-    console.log(`App runnng on port ${PORT} `);
-});
+import sql from 'mssql';
+import { database } from './dbController.js';
+export class BookQueries {
+    constructor() {
+        console.log("Im Also private");
+    }
+    static getBookInstance() {
+        if (!BookQueries.bookInstance) {
+            this.bookInstance = new BookQueries();
+        }
+        return this.bookInstance;
+    }
+    getBooks(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = (yield database.getPool()).input('id', sql.Int, id).query('select * from Books where BookID=@id');
+            return result;
+        });
+    }
+}
