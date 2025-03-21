@@ -1,19 +1,38 @@
 import sql from 'mssql';
 import config from './config/config.js';
 import express from 'express';
-
-import { BookQueries } from './database/bookQueries.js';
-import { database } from './database/dbController.js'
+import 'dotenv/config';
+import router from './routes/authRoutes.js';
+import cookieparser from 'cookie-parser'
+import { connectDB } from './config/db.js';
 
 const app = express();
+app.use(express.json())
+app.use(cookieparser());
+
+const connection = async () => {
+  try {
+    
+    const pool = await connectDB(); 
+    
+    console.log('✅ Connected to Azure SQL Database');
+    
+  } catch (error) {
+    console.error('❌ Connection error:', error);
+    process.exit(1);
+  }
+};
 
 
 
-app.get('/', async (req, res) => {
+app.use('/api/auth', router)
 
-  const respsonse = await BookQueries.getBookInstance().getBooks(1);
-  console.log(respsonse)
-  res.send(respsonse)
+const port = process.env.PORT;
+app.listen(port||3000, () =>
+{
+  console.log(`Server is running on port ${port}`);
+
+
   
 })
 

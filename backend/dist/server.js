@@ -7,15 +7,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+import { connectDB } from './config/db.js';
 import express from 'express';
-import { BookQueries } from './database/bookQueries.js';
+import 'dotenv/config';
 const app = express();
-app.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const respsonse = yield BookQueries.getBookInstance().getBooks(1);
-    console.log(respsonse);
-    res.send(respsonse);
-}));
-const PORT = process.env.PORT || 3000;
-app.listen(3000, function listener() {
-    console.log(`App runnng on port ${PORT} `);
+const connection = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const pool = yield connectDB();
+        console.log('✅ Connected to Azure SQL Database');
+    }
+    catch (error) {
+        console.error('❌ Connection error:', error);
+        process.exit(1);
+    }
+});
+connection();
+const port = process.env.PORT;
+app.listen(port || 3000, () => {
+    console.log(`Server is running on port ${port}`);
 });
