@@ -5,7 +5,7 @@ export class database
     public static instance: database;
     private static pool: Promise<sql.ConnectionPool>;
 
-    private constructor()
+    constructor()
     {
         console.log("Cant Touch This im private");
     }
