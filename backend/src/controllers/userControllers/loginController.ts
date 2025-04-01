@@ -6,12 +6,6 @@ import { connectDB } from "../../config/db.js";
 import jwt from 'jsonwebtoken'
 import { loginSchema } from "../../types/userTypes.js";
 
-
-
-
-
-
-
 export const login = async(req: Request, res: Response): Promise<void> =>
     {
         try {
@@ -30,25 +24,26 @@ export const login = async(req: Request, res: Response): Promise<void> =>
                 }
         
             const {email, password} = parsedData.data;
+
             const pool = await connectDB();
             const result = await pool.request()
             .input("email", sql.VarChar(100),email)
-            .query(`SELECT * from dbo.users where email = @email`)
+            .query(`SELECT * from dbo.users where EMAIL = @email`)
             
-        
+            console.log("-------------After query---------------");
             const user = result.recordset[0];
             console.log(user);
             if(!user)
             {
                 console.log("Not Found");
-                res.status(400).json({
+                res.status(401).json({
                     message: "User Not Found",
                     status: 400,
                 })
                 return
             }
-        
-            const isPasswordCorrect = await bcrypt.compare(password, user.passwordHash);
+            console.log("login route before password");
+            const isPasswordCorrect = await bcrypt.compare(password, user.PASSWORD);
     
             // const hashedPassword: string = await hashPassword(password);
             // console.log(hashedPassword);
@@ -56,9 +51,9 @@ export const login = async(req: Request, res: Response): Promise<void> =>
     
             if(!isPasswordCorrect)
             {
-                res.status(400).json({
+                res.status(401).json({
                     message: "Password Incorrect.",
-                    status: 400,
+                    status: 401,
                 })
                 return
             }

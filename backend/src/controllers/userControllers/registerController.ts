@@ -1,98 +1,87 @@
-
 import { Request, Response } from "express";
-import bcrypt from "bcryptjs"
+import bcrypt from "bcryptjs";
 import sql from 'mssql';
 import { connectDB } from "../../config/db.js";
 import { UserSchema } from "../../types/userTypes.js";
 
+const hashPassword = async (password: string): Promise<string> => {
+    let salt: string = await bcrypt.genSalt(10);
+    let hash: string = await bcrypt.hash(password, salt);
+    return hash;
+};
 
-const hashPassword = async(password: string): Promise<string> =>
-    {
-        let salt: string = await bcrypt.genSalt(10);
-        let hash: string = await bcrypt.hash(password, salt);
-        return hash;
-    }
-    
-
-
-
-export const createUser = async(request: Request, response: Response): Promise<void> => {
-
+export const createUser = async (request: Request, response: Response): Promise<void> => {
     try {
-        console.log("Body : ",request.body);
-        const parsedData = UserSchema.safeParse(request.body)
-        console.log("body: ", request.body);
-        console.log("parsed data: ", parsedData);
-    
-        if(!parsedData.success)
-        {
+        console.log("Body: ", request.body);
+        const parsedData = UserSchema.safeParse(request.body);
+        console.log("Parsed data: ", parsedData);
+
+        if (!parsedData.success) {
             response.status(400).json({
-                message: "Zod Error",
+                message: "Validation Error",
                 status: 400,
-                error: parsedData.error.format()
-            })
-            return
+                error: parsedData.error.format(),
+            });
+            return;
         }
-    
-        const {userId, fullName, password, email, university, universityID} = parsedData.data;
-        const hashedPassword:string = await hashPassword(password);
-    
+
+       
+        const { fullName, password, email } = parsedData.data;
 
         
+        const hashedPassword: string = await hashPassword(password);
+
         const pool = await connectDB();
 
+      
         const result = await pool.request()
-        .input("userId", sql.VarChar(100),userId )
-        .query(`SELECT * from dbo.users where userId = @userId`)
+            .input("EMAIL", sql.VarChar(100), email)
+            .query(`SELECT * FROM dbo.Users WHERE EMAIL = @EMAIL`);
 
-        const user = result.recordset[0];
-        if(!user)
-        {
+        const existingUser = result.recordset[0];
+
+        if (existingUser) {
             response.status(400).json({
-                message: "User Id already in use",
+                message: "Email is already in use",
                 status: 400,
-            })
-            return
+            });
+            return;
         }
+       
 
-        await pool.request()
-        .input("fullName", sql.NVarChar(100), fullName)
-        .input("password", sql.NVarChar(255), hashedPassword)
-        .input("email", sql.NVarChar(255), email)
-        .input("date", sql.DateTime, new Date())
-        .input("university", sql.VarChar(100), university)
-        .input("universityID", sql.VarChar(100), universityID)
-        .input("userId", sql.VarChar(100), userId)
-        .input("isAdmin", sql.Bit, false)
-        .input("isApproved", sql.Bit, false)
-        .input("fines", sql.Int, 0)
-        .input("ProfilePic", sql.VarChar(255), null)
-        .input("borrowedBooks", sql.Int, 0)
-        .query(`insert into dbo.Users ( [name], email, passwordHash, createdAt, isAdmin, isApproved, borrowedBooks, university, universityID, fines, ProfilePic, userId)
-    values (@fullName, @email, @password, @date, @isAdmin, @isApproved, @borrowedBooks, @university, @universityID, @fines, @ProfilePic, @userId )`)
-    
-    
+      
+        const insertResult = await pool.request()
+        .input("FullName", sql.VarChar(255), fullName)
+        .input("Password", sql.VarChar(255), hashedPassword)
+        .input("Email", sql.VarChar(100), email)
+        .query(`
+            INSERT INTO dbo.Users (DISPLAYNAME, PASSWORD, EMAIL)
+            OUTPUT INSERTED.UserID, INSERTED.DISPLAYNAME, INSERTED.EMAIL
+            VALUES (@FullName, @Password, @Email);
+        `);
+           
+            
+
+       
+        const insertedUserId = insertResult.recordset[0].USERID;
+        
+
+        
         response.status(201).json({
             message: "User Created Successfully",
             status: 201,
             user: {
-                userId,
+                userId: insertedUserId,
                 fullName,
-                password:hashedPassword,
                 email,
-                university, 
-                universityID,
-            }
-        })
+            },
+        });
     } catch (error) {
-        console.log("Error Due to: ", error)
+        console.log("Error due to: ", error);
         response.status(500).json({
-            message: "Error",
+            message: "Internal Server Error",
             error: error,
-            status: 400
-        })
+            status: 500,
+        });
     }
-
-
-}
-
+};
