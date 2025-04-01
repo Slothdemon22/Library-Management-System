@@ -9,9 +9,10 @@ const hashPassword = async (password) => {
 };
 export const createUser = async (request, response) => {
     try {
+        console.log("Body : ", request.body);
         const parsedData = UserSchema.safeParse(request.body);
-        // console.log("body: ", request.body);
-        // console.log("parsed data: ", parsedData);
+        console.log("body: ", request.body);
+        console.log("parsed data: ", parsedData);
         if (!parsedData.success) {
             response.status(400).json({
                 message: "Zod Error",

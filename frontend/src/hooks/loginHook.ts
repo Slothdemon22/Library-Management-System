@@ -1,53 +1,37 @@
-import { useState } from "react"
-export const useAuth=()=>
-{
-     
-//   const [password,setPassword]=useState<String>("");
-//   const [email,setEmail]=useState<String>("");
-  const [loading,setLoading]=useState(false);
-  const [error,setError]=useState(false);
+import { useState } from "react";
 
+export const useAuth = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
+  const onSubmitAuth = async (email: string, password: string) => {
+    if (!email || !password) return;
 
-  const onSubmitAuth= async(email:String,password:String)=>
-  { 
-     if(!password||!email)
-        return;
     setLoading(true);
-    setError(false);
+    setError(null);
 
-    try
-    {
-        const response = await fetch("http://localhost:3000/api/auth/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password }),
-          });
-          setLoading(false);
-          console.log("response :",response)
-          
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+
+      const response = await fetch("http://localhost:3000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json(); 
+
+      if (!response.ok) {
+        throw new Error(data.message || "Error while logging in");
+      }
+
+      setLoading(false);
+      return data;
+    } catch (error: any) {
+      setError(error.message || "An error occurred during login");
+      setLoading(false);
     }
-    catch(Error:any)
-    {
-      setError(true);
-    }
+  };
 
-
-
-   
-    
-
-
-
-
-
-
-
-
-
-  }
-  return {loading,error,onSubmitAuth}
-
-
-  
-}
+  return { loading, error, onSubmitAuth };
+};

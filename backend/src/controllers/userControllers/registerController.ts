@@ -19,9 +19,10 @@ const hashPassword = async(password: string): Promise<string> =>
 export const createUser = async(request: Request, response: Response): Promise<void> => {
 
     try {
+        console.log("Body : ",request.body);
         const parsedData = UserSchema.safeParse(request.body)
-        // console.log("body: ", request.body);
-        // console.log("parsed data: ", parsedData);
+        console.log("body: ", request.body);
+        console.log("parsed data: ", parsedData);
     
         if(!parsedData.success)
         {
