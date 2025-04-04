@@ -74,7 +74,7 @@ export default function LoginPage() {
                  const email=form.get("email");
                  const password=form.get("password");
                  console.log("email :",email, " Password : ",password);
-                 onSubmitAuth(email as String,password as String);
+                 onSubmitAuth(email as string,password as string);
 
             }
           } className="space-y-5 sm:space-y-6">

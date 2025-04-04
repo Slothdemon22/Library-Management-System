@@ -84,3 +84,52 @@ describe('User Endpoint Tests', () => {
     //     expect(res.status).toBe(401);
     // });
 });
+
+describe("Book Creation validation Tests",()=>
+{
+    // Sample test data
+    const dummyBook = {
+        "title": "The Great Gatsby",
+        "author": "F. Scott Fitzgerald",
+        "genre": "Fiction",
+        "bookImage": "https://example.com/book-covers/gatsby.jpg",
+        "primaryColor": "red", 
+        "bookDetails": "First edition, hardcover",
+         "quantity":10,
+        "bookSummary": "Set in the Jazz Age on Long Island, the novel depicts first-person narrator Nick Carraway's interactions with mysterious millionaire Jay Gatsby and Gatsby's obsession to reunite with his former lover, Daisy Buchanan."
+    };
+        test('Book creation test',async()=>
+        {
+            
+            const res=await apiClient.post(`/admin/addBook`,dummyBook);
+            expect(res.status).toBe(201);
+        })
+        test('Missing author attribute test',async()=>
+        {
+            const data=dummyBook;
+            delete data.author;
+            const res=await apiClient.post(`/admin/addBook`,data);
+            expect(res.status).toBe(400);
+
+        })
+        test('Missing title attribute test',async()=>
+            {
+                
+                const data=dummyBook;
+                delete data.title;
+                const res=await apiClient.post(`/admin/addBook`,data);
+                expect(res.status).toBe(400);
+    
+            })
+        // test("Missing quantity test",async()=>
+        // {
+        //     const data =dummyBook;
+        //     delete data.quantity;
+        //     const res=await apiClient.post(`/admin/addBook`,data);
+        //         expect(res.status).toBe(201);
+        // })
+
+        
+
+
+})

@@ -4,6 +4,7 @@ import router from './routes/authRoutes.js';
 import cookieparser from 'cookie-parser';
 import { connectDB } from './config/db.js';
 import cors from 'cors';
+import adminRouter from './routes/adminRoutes.js';
 const app = express();
 app.use(express.json());
 app.use(cookieparser());
@@ -21,6 +22,7 @@ const connection = async () => {
     }
 };
 app.use('/api/auth', router);
+app.use('/api/admin', adminRouter);
 connection();
 const port = process.env.PORT;
 app.listen(port || 3000, () => {
