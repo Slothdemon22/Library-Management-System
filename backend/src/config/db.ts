@@ -1,21 +1,8 @@
-import sql from 'mssql';
-import config from './config.js';
-export const connectDB = async() =>
-{
-  const pool = await sql.connect(config);
-  //console.log("pool", pool.pool.used.length)
-  // await sql.connect(config);
-  // await sql.connect(config);
-  // console.log(`✅ Connected to Azure SQL Database`);
+import { createClient } from '@supabase/supabase-js';
+import dotenv from 'dotenv';
 
-  // console.log(`Active Connections: ${pool.pool.used.length}`);
-  // console.log(`Idle Connections: ${pool.pool.free.length}`);
-  // console.log(`Pending Requests: ${pool.pool.pendingAcquires.length}`);
-  
-  if (pool)
-    return pool;
-  else 
-    throw new Error('Database connection failed');
-    
-}
+// Use `NEXT_PUBLIC_` prefix for client-side variables
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY!; // Corrected key reference
 
+export const supabase = createClient(supabaseUrl, supabaseKey);

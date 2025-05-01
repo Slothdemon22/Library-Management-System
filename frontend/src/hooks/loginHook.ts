@@ -20,6 +20,7 @@ export const useAuth = () => {
       });
 
       const data = await response.json(); 
+      console.log("Response from server:", data); // Log the response data
 
       if (!response.ok) {
         throw new Error(data.message || "Error while logging in");

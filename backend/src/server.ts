@@ -1,43 +1,25 @@
 import sql from 'mssql';
-import config from './config/config.js';
+
 import express from 'express';
 import 'dotenv/config';
-import router from './routes/authRoutes.js';
-import cookieparser from 'cookie-parser'
-import { connectDB } from './config/db.js';
-import cors from 'cors'
-import adminRouter from './routes/adminRoutes.js';
-
+import cors from 'cors';
+import { authrouter } from './routes/authRoutes.js';
+import { bookrouter } from './routes/bookroutes.js';
 
 
 
 const app = express();
 app.use(express.json())
-app.use(cookieparser());
+
 app.use(cors(
   {
     origin:"*"
   }
 ))
 
-const connection = async () => {
-  try {
-    
-    const pool = await connectDB(); 
-    
-    console.log('✅ Connected to Azure SQL Database');
-    
-  } catch (error) {
-    console.error('❌ Connection error:', error);
-    process.exit(1);
-  }
-};
-
-
-
-app.use('/api/auth', router);
-app.use('/api/admin',adminRouter);
-connection()
+// Use user routes
+app.use('/api/auth', authrouter);
+app.use('/api/books', bookrouter);
 
 const port = process.env.PORT;
 app.listen(port||3000, () =>

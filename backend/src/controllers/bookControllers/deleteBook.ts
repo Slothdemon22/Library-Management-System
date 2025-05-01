@@ -1,35 +1,43 @@
-import { Response, Request } from "express";
-import { connectDB } from "../../config/db.js";
-import sql from 'mssql';
+
+import {supabase} from '../../config/db.js'
+import { Request, Response } from 'express';
+
 
 export const deleteBook = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const book_id = req.body.book_id;
-    console.log("Book ID: ", book_id);
-
-    if (!book_id) {
-      res.status(400).json({
-        message: "Invalid Book ID.",
-        status: 400,
-      });
-      return;
+ try{
+    const {id}=req.body;
+    console.log("id :",id)
+    if (!id) {
+        res.status(400).json({ message: 'Book ID is required' });
+        return;
     }
+    const { data, error } = await supabase
+        .from('bookTable')
+        .delete()
+        .eq('id', id)
+        .select('*');
+    console.log("data :",data)
+    if (error) {
+        console.error('Error deleting book:', error);
+        res.status(400).json({ message: 'Error while deleting book' });
+        return;
+    }
+    if (!data || data.length === 0) {
+        res.status(404).json({ message: 'Book not found' });
+        return;
+    }
+    res.status(200).json({ message: 'Book deleted successfully', book: data });
+    return;
 
-    const pool = await connectDB();
-    const result = await pool.request()
-      .input("id_book", sql.Int, book_id)
-      .query(`DELETE FROM dbo.Books WHERE BookID = @id_book`);
 
-    res.status(200).json({
-      message: "Book deleted successfully",
-      status: 200,
-    });
-  } catch (error: any) {
-    console.log("In catch block");
-    console.error("Error deleting book:", error);
-    res.status(500).json({
-      message: error.message,
-      status: 500,
-    });
-  }
-};
+
+ }catch(error){
+
+        console.error('Error deleting book:', error);
+        res.status(500).json({ message: 'Internal server error' });
+        return;
+
+ }
+
+
+}

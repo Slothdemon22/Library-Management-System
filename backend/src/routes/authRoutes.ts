@@ -1,16 +1,13 @@
-import express from "express";
+import express, { Router } from 'express';
+import { getAllUsers } from '../controllers/userControllers/getusers.js';
+import { registerUser } from '../controllers/userControllers/registerController.js';
+import { login } from '../controllers/userControllers/loginController.js';
 
-import { createUser  } from "../controllers/userControllers/registerController.js";
-import { logout } from "../controllers/userControllers/logoutController.js";
-import { login } from "../controllers/userControllers/loginController.js";
-import { OauthLogin } from "../controllers/userControllers/OauthLogin.js";
+const authrouter = express.Router();
 
+// GET /api/users - Get all users
+authrouter.get('/users', getAllUsers);
+authrouter.post('/register', registerUser);
+authrouter.post('/login', login)
 
-const router = express.Router();
-router.post('/register', createUser)
-router.post('/login', login)
-router.post('/logout', logout)
-router.post('/OauthLogin', OauthLogin); 
-
-
-export default router
+export {authrouter};

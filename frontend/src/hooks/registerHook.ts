@@ -20,6 +20,7 @@ export const useRegister = () => {
       });
 
       const data = await res.json(); 
+      console.log("Response from server:", data); // Log the response data
 
       if (!res.ok) {
         console.log("Error")
@@ -27,6 +28,7 @@ export const useRegister = () => {
       }
 
       setLoading(false);
+      
       return data; 
     } catch (error: any) {
       setLoading(false);

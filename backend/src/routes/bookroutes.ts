@@ -1,0 +1,19 @@
+
+import {Request, Response, Router} from 'express';
+import { getAllBooks } from '../controllers/bookControllers/getbook.js';
+import { addBooks } from '../controllers/bookControllers/addBooksController.js';
+import { deleteBook } from '../controllers/bookControllers/deleteBook.js';
+import { requestBook } from '../controllers/bookControllers/requestBook.js';
+import { approveBook } from '../controllers/adminControllers/approveAccount.js';
+import { getUserBorrowedBooks } from '../controllers/bookControllers/getUserBorrowed.js';
+
+
+const bookrouter = Router();
+
+bookrouter.get('/getbooks', getAllBooks);
+bookrouter.post("/addbook", addBooks)
+bookrouter.post("/deletebook",deleteBook) 
+bookrouter.post("/requestBook",requestBook)
+bookrouter.post("/approveBook",approveBook)
+bookrouter.post("/getUserBorrowedBooks",getUserBorrowedBooks)
+export {bookrouter};

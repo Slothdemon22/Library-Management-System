@@ -1,69 +1,41 @@
-import { Response, Request } from "express";
-import { connectDB } from "../../config/db.js";
-import sql from 'mssql'
 
-interface Book {
-    BookID: number;
-    Title: string;
-    Author: string;
-    Genre: string;
-    BookImage: string | null;
-    PrimaryColor: string | null;
-    BookDetails: number | null;
-    Quantity: number;
-    Book_Summary: string | null;
-    createdAt: Date;
-    Reviews: bigint | null;
-}
+import {supabase} from '../../config/db.js'
+import { Request, Response } from 'express';
 
-export const getBook = async (req: Request, res: Response) => {
+
+export const getAllBooks = async (req: Request, res: Response): Promise<void> => {
     try {
+        const { data: books, error } = await supabase
+            .from('bookTable')
+            .select('*');
 
-        const book_id = req.params.book_id;
 
-        const pool = await connectDB();
-        
-        const result = await pool.request()
-            .input("book_ID", sql.Int, book_id)
-            .query<Book>(`
-                SELECT 
-                    BookID,
-                    Title,
-                    Author,
-                    Genre,
-                    BookImage,
-                    PrimaryColor,
-                    BookDetails,
-                    Quantity,
-                    Book_Summary,
-                    createdAt,
-                    Reviews
-                FROM dbo.books
-                where BookID = @book_ID
-            `);
-
-        if (!result.recordset[0] ) {
-            return res.status(404).json({ 
+        if (error) {
+            console.error('Supabase error:', error);
+            res.status(500).json({ 
                 success: false,
-                message: "book not found in the library" 
+                error: error.message 
             });
+            return;
         }
 
-        const book = result.recordset[0]
+        if (!books || books.length === 0) {
+            res.status(404).json({
+                success: false,
+                message: 'No books found'
+            });
+            return;
+        }
 
         res.status(200).json({
             success: true,
-            book,
-            status: 200
+            data: books
         });
-
-    } catch (error:any) {
-        console.error("[BOOK ERROR]:", error);
-        res.status(500).json({
+    } catch (error) {
+        console.error('Error fetching books:', error);
+        res.status(500).json({ 
             success: false,
-            message: "Database operation failed",
-            error: error.message,
-            status: 500 
+            error: 'Internal server error' 
         });
     }
-};
+}   
