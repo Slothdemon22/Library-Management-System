@@ -4,6 +4,7 @@ export const getAllBooks = async (req, res) => {
         const { data: books, error } = await supabase
             .from('bookTable')
             .select('*');
+        console.log("books :", books);
         if (error) {
             console.error('Supabase error:', error);
             res.status(500).json({

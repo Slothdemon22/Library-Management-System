@@ -15,10 +15,11 @@
     "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
+    "dotenv": "^16.5.0",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "mssql": "^11.0.1",
+    "stripe": "^18.1.0",
     "typescript": "^5.8.2",
     "zod": "^3.24.2"
   },

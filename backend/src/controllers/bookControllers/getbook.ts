@@ -8,6 +8,7 @@ export const getAllBooks = async (req: Request, res: Response): Promise<void> =>
         const { data: books, error } = await supabase
             .from('bookTable')
             .select('*');
+        console.log("books :",books)
 
 
         if (error) {

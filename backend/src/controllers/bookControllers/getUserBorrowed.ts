@@ -13,7 +13,7 @@ export const getUserBorrowedBooks = async (req: Request, res: Response): Promise
 
     const { data, error } = await supabase
       .from("borrowDetails")
-      .select("*")
+      .select("*,book:bookID(*),user:userID(*)") // Select the user and book details as well
       .eq("userID", userID);
       console.log("data :",data)
 

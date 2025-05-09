@@ -34,7 +34,7 @@ export const approveBook = async (req, res) => {
         }
         const { data: changeStatus, error: changeStatusError } = await supabase
             .from("borrowRequests")
-            .update({ status: true })
+            .update({ status: "borrowed" })
             .eq("userID", userID)
             .eq("bookID", bookID)
             .select("*");
