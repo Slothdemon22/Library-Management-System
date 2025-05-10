@@ -131,29 +131,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 to-slate-900 text-slate-50">
       {/* Header */}
-      <header className="border-b border-slate-800 bg-slate-900/50">
-        <div className="container mx-auto px-6">
-          <div className="flex h-16 items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Library className="h-6 w-6 text-amber-400" />
-              <span className="text-xl font-bold text-white">BookWise</span>
-            </div>
-            <div className="flex items-center gap-4">
-              {isSignedIn ? (
-                <UserButton afterSignOutUrl="/" />
-              ) : (
-                <Button
-                  variant="outline"
-                  className="border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white"
-                  onClick={() => window.location.href = "/sign-in"}
-                >
-                  Sign In
-                </Button>
-              )}
-            </div>
-          </div>
-        </div>
-      </header>
+     
 
       {/* Hero Section */}
       <section className="relative overflow-hidden py-16 px-6">

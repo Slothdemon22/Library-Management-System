@@ -6,6 +6,7 @@ import { ArrowRight, BookOpen, Check, Library, Shield, Users, BookMarked, Settin
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import Link from "next/link"
 
 export default function LandingPage() {
   const [activePlan, setActivePlan] = useState<"monthly" | "yearly">("monthly")
@@ -185,10 +186,10 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="mt-16 grid gap-8 lg:grid-cols-3">
+          <div className="mt-12 grid gap-8 lg:grid-cols-2 lg:gap-6">
             <PricingCard
-              title="Starter"
-              price={activePlan === "monthly" ? "$49" : "$39"}
+              title="Basic"
+              price={activePlan === "monthly" ? "$29" : "$23"}
               period={activePlan === "monthly" ? "per month" : "per month, billed yearly"}
               description="Perfect for small libraries just getting started."
               features={[
@@ -200,9 +201,10 @@ export default function LandingPage() {
               ]}
               buttonText="Get Started"
               buttonVariant="outline"
+              href="/payment"
             />
             <PricingCard
-              title="Professional"
+              title="Premium"
               price={activePlan === "monthly" ? "$99" : "$79"}
               period={activePlan === "monthly" ? "per month" : "per month, billed yearly"}
               description="Ideal for medium-sized libraries with growing collections."
@@ -217,24 +219,7 @@ export default function LandingPage() {
               buttonText="Get Started"
               buttonVariant="primary"
               popular={true}
-            />
-            <PricingCard
-              title="Enterprise"
-              price={activePlan === "monthly" ? "$199" : "$159"}
-              period={activePlan === "monthly" ? "per month" : "per month, billed yearly"}
-              description="For large libraries with complex requirements."
-              features={[
-                "Unlimited books",
-                "Unlimited staff accounts",
-                "Advanced borrowing system",
-                "Custom reports & dashboards",
-                "24/7 phone & email support",
-                "API access",
-                "Dedicated account manager",
-                "Custom integrations",
-              ]}
-              buttonText="Contact Sales"
-              buttonVariant="outline"
+              href="/payment"
             />
           </div>
         </div>
@@ -434,6 +419,7 @@ function PricingCard({
   buttonText,
   buttonVariant,
   popular = false,
+  href,
 }: {
   title: string
   price: string
@@ -443,6 +429,7 @@ function PricingCard({
   buttonText: string
   buttonVariant: "primary" | "outline"
   popular?: boolean
+  href: string
 }) {
   return (
     <Card
@@ -474,16 +461,18 @@ function PricingCard({
         </ul>
       </CardContent>
       <CardFooter>
-        <Button
-          className={
-            buttonVariant === "primary"
-              ? "w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-medium"
-              : "w-full border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white"
-          }
-          variant={buttonVariant === "primary" ? "default" : "outline"}
-        >
-          {buttonText}
-        </Button>
+        <Link href={href} className="w-full">
+          <Button
+            className={
+              buttonVariant === "primary"
+                ? "w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-medium"
+                : "w-full border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white"
+            }
+            variant={buttonVariant === "primary" ? "default" : "outline"}
+          >
+            {buttonText}
+          </Button>
+        </Link>
       </CardFooter>
     </Card>
   )

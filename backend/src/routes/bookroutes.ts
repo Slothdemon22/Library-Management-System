@@ -3,21 +3,18 @@ import { getAllBooks } from '../controllers/bookControllers/getbook.js';
 import { addBooks } from '../controllers/bookControllers/addBooksController.js';
 import { deleteBook } from '../controllers/bookControllers/deleteBook.js';
 import { requestBook } from '../controllers/bookControllers/requestBook.js';
-
 import { getUserBorrowedBooks } from '../controllers/bookControllers/getUserBorrowed.js';
-
 import { editBook } from '../controllers/bookControllers/editBook.js';
-
+import { payment } from '../controllers/bookControllers/payment.js';
 const bookrouter = Router();
+
 
 bookrouter.get('/getbooks', getAllBooks);
 bookrouter.post("/addbook", addBooks)
 bookrouter.post("/deletebook",deleteBook) 
 bookrouter.post("/requestBook",requestBook)
-
 bookrouter.post("/getUserBorrowedBooks",getUserBorrowedBooks)
-
 bookrouter.post("/editbook", editBook)
-// bookrouter.post("payment",payment)
+bookrouter.post("/create-checkout-session", payment)
 
 export {bookrouter};

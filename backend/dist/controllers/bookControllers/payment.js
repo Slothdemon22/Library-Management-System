@@ -1,19 +1,14 @@
-import { Request, Response } from 'express';
 import Stripe from 'stripe';
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
-
-export const payment = async (req: Request, res: Response) => {
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+export const payment = async (req, res) => {
     try {
         console.log("payment");
         console.log(req.body);
         const { amount } = req.body;
-
         if (!amount) {
             res.status(400).send({ error: 'Amount is required' });
             return;
         }
-
         // Create a Checkout Session with line items
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
@@ -34,19 +29,15 @@ export const payment = async (req: Request, res: Response) => {
             success_url: `http://localhost:3001/payment/success`,
             cancel_url: `http://localhost:3001/payment/cancel`,
         });
-
         // Send the Checkout Session ID to the frontend
         res.status(200).send({
             sessionId: session.id,
         });
-
-    } catch (error: any) {
+    }
+    catch (error) {
         console.error('Error creating checkout session:', error);
         res.status(500).send({
             error: error.message,
         });
     }
 };
-
-
-

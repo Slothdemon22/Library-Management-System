@@ -33,10 +33,10 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen mt-24">
       {/* Sidebar */}
-      <aside className="w-64 bg-slate-900/60 backdrop-blur-sm border-r border-slate-800/50 h-screen sticky top-0 shadow-xl z-10">
-        <div className="p-4 pt-20">
+      <aside className="w-64 bg-slate-900/60 backdrop-blur-sm border-r border-slate-800/50 h-screen sticky top-0 shadow-xl z-10 ">
+        <div className="p-4 ">
           <div className="flex items-center gap-3 bg-slate-800/50 rounded-lg px-3 py-2.5 mb-8 border border-slate-700/50 shadow-md">
             <Avatar className="h-9 w-9 border-2 border-amber-500/20">
               <AvatarImage src="/placeholder-user.jpg" alt="Adrian" />
@@ -107,7 +107,7 @@ export default function Dashboard() {
         </header>
         
         {/* Content */}
-        <div className="flex-1 p-6 pt-32">
+        <div className="flex-1 p-6 pt-6">
           {renderActiveTab()}
         </div>
       </main>
