@@ -1,7 +1,7 @@
 # Database Lab Project
 
 ## 🚀 Project Overview
-This project is a full-stack web application designed to manage and streamline data operations efficiently. It follows a **Next.js frontend** and an **Express.js backend** architecture, using MongoDB as the database.
+This project is a full-stack web application designed to manage and streamline data operations efficiently. It follows a **Next.js frontend** and an **Expres.js backend** architecture, using MongoDB as the database.
 
 ## 🛠️ Tech Stack
 - **Frontend:** Next.js (TypeScript, Zod for validation, Tailwind CSS)
